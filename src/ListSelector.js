@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import map from 'lodash/map';
 import { Context } from './config/state.manager';
+import { listOptions as options } from './constants';
 
-const Parameter = (props) => {
-  const { title, options, name } = props;
+const ListSelector = (props) => {
+  const { name } = props;
   const { state, dispatch } = React.useContext(Context);
   const { parameters } = state;
 
@@ -22,9 +23,7 @@ const Parameter = (props) => {
     );
   }
   return (
-    <label className="title-label" htmlFor="sonority-label">
-      {title}
-      <select onChange={onClick} className="select" id="sonority-label">
+      <select onChange={onClick} className="list-selector select" id="list-label">
         { map(options, (option) => (
           <option 
             onClick={onClick} 
@@ -35,14 +34,13 @@ const Parameter = (props) => {
           </option>
           ))}
       </select>
-    </label>
   );
 };
 
-Parameter.propTypes = {
+ListSelector.propTypes = {
   title: PropTypes.string,
-  name: PropTypes.oneOf(['sonority', 'originality', 'language', 'length', 'firstLetter']),
+  name: PropTypes.string,
   options: PropTypes.array,
 };
 
-export default Parameter;
+export default ListSelector;

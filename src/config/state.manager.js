@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react';
+import PropTypes from 'prop-types';
 
 const initialState = {
   word: '...',
@@ -9,9 +10,11 @@ const initialState = {
   dictioIt: [],
   parameters: {
     sonority: 0, 
-    originality: 0, 
+    originality: 4, 
     language: 0, 
-    length: 0
+    length: 0,
+    firstLetter: 0,
+    // list: 0
   }
 };
 
@@ -81,6 +84,10 @@ const Provider = ({ children }) => {
       {children}
     </Context.Provider>
   );
+};
+
+Provider.propTypes = {
+  children: PropTypes.object.isRequired,
 };
 
 export { Context, Provider };

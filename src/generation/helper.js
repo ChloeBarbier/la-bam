@@ -1,4 +1,4 @@
-const { max } = require('lodash');
+// const { max } = require('lodash');
 const indexOf = require('lodash/indexOf');
 
 const getRandomInt = (min, max, word) => {
@@ -52,13 +52,16 @@ const debug = (mot, un, deux, trois) => {
     }
 };
 const getWordLength = (length) => {
-    // add length as a parameter
-    const wordLength = getRandomInt(3, length >= 3 ? length : 3);
-    // console.log("wordLength", wordLength);
-
-    return wordLength;
+    switch (length) {
+        case 0: return getRandomInt(3, 10);
+        case 1: return getRandomInt(3, 5);
+        case 2: return getRandomInt(4, 7);
+        case 3: return getRandomInt(6, 9);
+        case 4: return getRandomInt(7, 14);
+        default: return getRandomInt(3, 10);
+    }
 };
-const getFirstLetterIndex = (alphabet, originality) => {
+const getFirstLetterIndex = (alphabet) => {
     // add originality as a parameter
     const randomLetterIndex = getRandomInt(0, alphabet.length - 1);
     // const randomFirstLetter = alphabet[randomLetterIndex];
@@ -83,13 +86,13 @@ const generateMatrice3D = (dictionary) => {
             for (let z = 0; z < long; z++) {
                 const firstLetterIndex = z === 0 ? alphabet.length : indexOf(alphabet, word[z - 1]);
 
-                if (firstLetterIndex != -1) {
+                if (firstLetterIndex !== -1) {
                 const secondLetterIndex = indexOf(alphabet, word[z]);
 
-                    if (secondLetterIndex != -1) {
+                    if (secondLetterIndex !== -1) {
                         const thirdLetterIndex = z + 1 === long ? alphabet.length : indexOf(alphabet, word[z + 1]);
 
-                        if (thirdLetterIndex != -1) {
+                        if (thirdLetterIndex !== -1) {
                             // console.log("----", word, word[z], firstLetterIndex, secondLetterIndex, thirdLetterIndex)
                             debug(word, firstLetterIndex, secondLetterIndex, thirdLetterIndex);
                             matrice[firstLetterIndex][secondLetterIndex][thirdLetterIndex]++;
@@ -111,17 +114,29 @@ const generateMatrice3D = (dictionary) => {
     };
 };
 const isExistingWord = (dictionary, word) => {
+    // const dicLength = dictionary.length;
+    // let i = 0;
+    // let isExisting = false;
+    // while (i < dicLength && isExisting === false) {
+    //     const dicWord = dictionary[i].toLowerCase();
+    //     if (dicWord.length === word.length) {
+    //         isExisting = (word === dicWord);
+    //     }
+    //     i++;
+    // }
+
     const dicLength = dictionary.length;
     let i = 0;
-    let isExisting = false;
-    while (i < dicLength && isExisting === false) {
-        const dicWord = dictionary[i].toLowerCase();
-        if (dicWord.length === word.length) {
-            isExisting = (word === dicWord);
+    // let isExisting = false;
+    for (i = 0; i < dicLength; i++) {
+        if (dictionary[i].toLowerCase() === word) {
+            // isExisting = true;
+            // break;
+            return true;
         }
-        i++;
-    }
-    return isExisting;
+      }
+
+    return false;
 };
 
 // export {

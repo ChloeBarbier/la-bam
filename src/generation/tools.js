@@ -1,13 +1,14 @@
+/* eslint-disable no-undef */
 const {
   getAlphabet,
   getWordLength,
   getFirstLetterIndex,
   getRandomInt
 } = require('./helper');
-const {
-  generateMatriceSimple3D_v2: generateMatriceSimple3D,
-  // generateMatriceSimple3D
-} = require ('./brain');
+// const {
+//   generateMatriceSimple3D_v2: generateMatriceSimple3D,
+//   // generateMatriceSimple3D
+// } = require ('./brain');
 
 const getAvailableCharacters = (matriceSimple3d, first, second, originality, isEnd) => {
   // tab qui contient les index des 0,1,2,3,4 correspondant à l'originalité #
@@ -52,7 +53,7 @@ const getEndingAvailableCharacters = (tabOriginality, matriceSimple3d, second, a
   const tabOriginalityEnding = [];
 
   // reduce tabOriginality with third items that can end a word [second, third, end]
-  tabOriginality.forEach((item, index) => {
+  tabOriginality.forEach((item) => {
     if (matriceSimple3d[second][item] && matriceSimple3d[second][item][alphabet.length] !== 0) { // 26 au undefined
       tabOriginalityEnding[tabOriginalityEnding.length] = item;
     }
@@ -60,18 +61,25 @@ const getEndingAvailableCharacters = (tabOriginality, matriceSimple3d, second, a
 
   return tabOriginalityEnding;
 };
-const generateWord = (matriceSimple3d, originality) => {
+const generateWord = (matriceSimple3d, originality, firstLetter, length) => {
   // 'first' is initialized to START (index = 26) and 'second' is the actual first letter
   let newWord = [];
   const alphabet = getAlphabet();
   let first = alphabet.length;
   let second = getFirstLetterIndex(alphabet);
 
+  // console.log("length", length)
+
   // First letter
-  newWord[0] = alphabet[second];
+  // newWord[0] = alphabet[second];
+  // newWord[0] = 'l';
+  newWord[0] = firstLetter > 0 ? alphabet[firstLetter-1] : alphabet[second];
+  // console.log(newWord[0])
+
+  // size the number of letters
+  const wordLength = getWordLength(length);
 
   // Intermediate letters
-  const wordLength = getWordLength(10);
   for (let z = 1; z < wordLength - 1; z++) {
     const tabOriginality = getAvailableCharacters(matriceSimple3d, first, second, originality);
 

@@ -35,7 +35,7 @@ const generateMatriceSimple3D = (dictionary) => {
   
         // find max M % of letter following index letter
         const tabSimple = [];
-        var M = max(tabEnPourcentage);
+        const M = max(tabEnPourcentage);
         // create a table simplifying tabEnPourcentage depending on max M and %
         tabEnPourcentage.forEach((item, index) => {
           if (item <= 1) tabSimple[index] = 0;
@@ -63,9 +63,7 @@ const generateMatriceSimple3D_v2 = (dictionary) => {
     const matriceSimple3d = [];
     const alphabet = getAlphabet();
      // MATRICE DES PROBABILITES
-    const { matrice, total: bigTotal, max } = generateMatrice3D(dictionary);
-    
-    console.log("------", bigTotal, max)
+    const { matrice, max } = generateMatrice3D(dictionary);
 
     for (let i = 0; i <= alphabet.length; i++) {
       const matriceSimple2d = [];
@@ -81,7 +79,7 @@ const generateMatriceSimple3D_v2 = (dictionary) => {
         // find max M % of letter following index letter
         // var M = max(tabEnPourcentage);
         const tabSimple = [];
-        var M = max;
+        const M = max;
         // create a table simplifying tabEnPourcentage depending on max M and %
         tabEnPourcentage.forEach((item, index) => {
             if (item === 0) tabSimple[index] = null;
