@@ -1,24 +1,34 @@
 import React from 'react';
 import { Context } from './config/state.manager';
-import Word from './Word';
+// import Word from './Word';
 import Parameter from './Parameter';
 import generate from './generation/generate';
-import { sonorityOptions, sizeOptions, originalityOptions, languageOptions } from './constants';
+import { 
+  // sonorityOptions,
+  sizeOptions,
+  // originalityOptions,
+  languageOptions,
+  alphabetOptions 
+} from './constants';
 
 const Form = () => {
   const { state, dispatch } = React.useContext(Context);
   const { parameters } = state;
   // const [word, setWord] = React.useState();
   const [words, setWords] = React.useState([]);
+  const [colors, setColors] = React.useState([]);
   const [dictionary, setDictionary] = React.useState();
   const languageOption = languageOptions[parameters.language];
 
-  console.log("words", words);
+  // console.log("words", words);
   
   const readDictionary = (option) => {
+    // console.log("........", option)
     fetch(option.path).then(response => {
-        response.text().then(response => {
+      // console.log("response", response)
+      response.text().then(response => {
           response = response.split('\n');
+          // console.log("response", response)
           dispatch(
             { 
               type: option.function, 
@@ -46,11 +56,14 @@ const Form = () => {
       const language = languageOptions[parameters.language];
       dictio = state[language.dictionary];
     }
-    console.log("dictio", dictio)
+    // console.log("dictio", dictio)
     for(var i=0; i<100; i++) {
       newWords.push(generate(parameters, dictio));
     }
+    let colorsArray = [];
+    newWords.forEach((word, i) => colorsArray.push(Math.floor(Math.random() * 10)));
     setWords(newWords);
+    setColors(colorsArray);
   };
 
   React.useEffect(() => {
@@ -63,22 +76,25 @@ const Form = () => {
     setDictionary(state[languageOption.dictionary]);
   }, [state[languageOption.dictionary]]);
 
+  // console.log("dictionary", state.dictioFr);
+
   return (
-    <div>
-      {/* <div className="grid-y"> */}
+      <div className="grid-y">
         {/* <div className="">
           <Parameter title="Originalité" options={originalityOptions} name='originality' />
         </div> */}
-        <div className="">
-          <button onClick={onClick50} type="button" className="success button">Générer</button>
+      
+        <div className="grid-x grid-margin-x align-center">
+            <button className="button generate" onClick={onClick50} type="button">Générer</button>
+            <Parameter className="cell" title="Première lettre" options={alphabetOptions} name='firstLetter' />
+            <Parameter className="cell" title="Longueur" options={sizeOptions} name='length' />
         </div>
       {/* </div> */}
       <div className="">
           {words.length 
-            ? words.map(word => {
-                const n = Math.floor(Math.random() * 10);
+            ? words.map((word, i) => {
                 return (
-                  <input size={word.length + 2} className={`tag-word tag-color-${n}`} value={word} readOnly />
+                  <input key={i} size={word.length + 2} className={`tag-word tag-color-${colors[i]}`} value={word} readOnly />
                 );
               }
             ) : null

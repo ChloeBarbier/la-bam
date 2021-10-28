@@ -6,15 +6,35 @@
   height: 40vmin;
 }
 
-.App-head {
+.App-title {
   background-color: #FDFFFC;
   width: 100%;
-  height: 3em;
+  height: 5em;
   justify-content: center;
   margin-top: 1em;
+
+  .title {
+    padding-top: .5em;
+    font-weight: bold;
+  }
+
+  .help {
+    color: grey;
+    font-style: italic;
+    font-size: small;
+    // font-weight: lighter;
+    // margin-top: .5em;
+  }
+
+
+  .list-selector {
+    display: inline;
+    width: auto;
+    margin-left: 1rem;
+  }
 }
 
-.App-header {
+.App-content {
   background-color: #292930;
   min-height: 90vh;
   display: flex;
@@ -25,8 +45,28 @@
   font-size: calc(10px + 2vmin);
   color: #FDFFFC;
 
+  .button.generate {
+    &:hover {
+      background-color: orange;
+      // background-color:#051937;
+      // background-color: rgb(78, 67, 179);
+      color: black;
+    }
+    background-color:rgb(243, 230, 207);
+    // background-color:rgb(250, 221, 166);
+    // background-color:#7992b8;
+    // background-color: rgb(127, 119, 201);
+    // background-color: #f8f8c5;
+    color: darkslategrey;
+
+    border-radius: 4px;
+    margin: 1.5rem;
+    margin-bottom: 1.75rem;
+
+  }
   .title-label {
     color: #FDFFFC;
+    margin-right: 1.5rem;
   }
 
   .slidecontainer {
@@ -65,13 +105,6 @@
   color: #09d3ac;
 }
 
-.button.success {
-  background-color: white !important;
-  border-radius: 4px;
-  margin: 1.5rem;
-  margin-bottom: 1.75rem;
-}
-
 .help-text {
   color: rgba(255, 255, 255, 0.200) !important;
 }
@@ -81,7 +114,7 @@
 }
 
 .word {
-  background-color: #3DE03D !important;
+  background-color: #c7cec7 !important;
   border-radius: 4px;
   border: 1px black;
   height: 2em;
@@ -93,7 +126,7 @@
 .tag-word {
   // width: auto;
   font-size: 1rem;
-  // background-color: #3DE03D !important;
+  background-color: #3DE03D !important;
   border-radius: 4px;
   border: 1px black;
   height: 2rem;
@@ -112,5 +145,3 @@
 .tag-color-7 {background-color: #052538 !important;}
 .tag-color-8 {background-color: #1f8c8f !important;}
 .tag-color-9 {background-color: #0e6366 !important;}
-
-
