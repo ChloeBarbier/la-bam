@@ -23,8 +23,8 @@ const Parameter = (props) => {
   }
   return (
     <label className="title-label" htmlFor="sonority-label">
-      {title}
-      <select onChange={onClick} className="select" id="sonority-label">
+      <span className="parameter-title">{title}</span>
+      <select onChange={onClick} className="select-parameter select" id="sonority-label">
         { map(options, (option) => (
           <option 
             onClick={onClick} 

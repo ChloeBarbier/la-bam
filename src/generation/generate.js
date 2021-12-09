@@ -2,7 +2,7 @@ import { generateWord } from './tools';
 import { generateMatriceSimple3D_v2} from './brain';
 
 const generate = (parameters, dictionary) => {
-  const { originality, firstLetter, length, list } = parameters;
+  const { originality, firstLetter, length } = parameters;
 
   // console.log("originality", originality)
 

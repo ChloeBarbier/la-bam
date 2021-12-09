@@ -7,56 +7,34 @@ import {
   // sonorityOptions,
   sizeOptions,
   // originalityOptions,
-  languageOptions,
+  listOptions,
+  // languageOptions,
   alphabetOptions 
 } from './constants';
 
 const Form = () => {
   const { state, dispatch } = React.useContext(Context);
-  const { parameters } = state;
-  // const [word, setWord] = React.useState();
+  const { parameters, lists, likedWords } = state;
+  const [myLists, setMyLists] = React.useState();
   const [words, setWords] = React.useState([]);
   const [colors, setColors] = React.useState([]);
   const [dictionary, setDictionary] = React.useState();
-  const languageOption = languageOptions[parameters.language];
-
+  
+  // const languageOption = languageOptions[parameters.language];
   // console.log("words", words);
   
-  const readDictionary = (option) => {
-    // console.log("........", option)
-    fetch(option.path).then(response => {
-      // console.log("response", response)
-      response.text().then(response => {
-          response = response.split('\n');
-          // console.log("response", response)
-          dispatch(
-            { 
-              type: option.function, 
-              [option.dictionary]: response 
-            }
-          );
-        });
-      });
-  };
-  // const onClick = () => {
-  //   let newWord;
-  //   if (!dictionary || dictionary.length === 0) {
-  //     const language = languageOptions[parameters.language];
-  //     const defaultDictionary = state[language.dictionary];
-  //     newWord = generate(parameters, defaultDictionary);
-  //   }
-  //   else newWord = generate(parameters, dictionary);
-  //   setWord(newWord);
-  // };
   const onClick50 = () => {
     let newWords = [];
+    // let dictio = dictionary;
+    // if (!dictionary || dictionary.length === 0) {
+    //   const language = languageOptions[parameters.language];
+    //   dictio = state[language.dictionary];
+    // }
     let dictio = dictionary;
     
     if (!dictionary || dictionary.length === 0) {
-      const language = languageOptions[parameters.language];
-      dictio = state[language.dictionary];
+      dictio = lists[parameters.list];
     }
-    // console.log("dictio", dictio)
     for(var i=0; i<100; i++) {
       newWords.push(generate(parameters, dictio));
     }
@@ -66,35 +44,84 @@ const Form = () => {
     setColors(colorsArray);
   };
 
+  // React.useEffect(() => {
+  //   languageOptions.forEach(
+  //     option => readDictionary(option)
+  //   );
+  // }, []);
+
   React.useEffect(() => {
-    languageOptions.forEach(
-      option => readDictionary(option)
+    let newLists = {};
+    listOptions.forEach(option => {
+      fetch(option.path).then(response => {
+        response.text().then(response => {
+            response = response.split('\n');
+            newLists = {
+              ...newLists,
+              [option.value]: response 
+            };
+            setMyLists(newLists);
+          })
+        });
+      }
     );
+    
   }, []);
 
   React.useEffect(() => {
-    setDictionary(state[languageOption.dictionary]);
-  }, [state[languageOption.dictionary]]);
+    dispatch({ 
+      type: 'setLists',
+      lists: myLists
+    });
+  }, [myLists, dispatch]);
 
-  // console.log("dictionary", state.dictioFr);
+  React.useEffect(() => {
+    setDictionary(lists[parameters.list]);
+  }, [lists, parameters.list]);
+
+  const onDoubleClick = (word) => {
+    const previousVal = likedWords[word];
+    dispatch({ 
+      type: 'setLikedWords', 
+      likedWords: {
+        ...likedWords,
+        [word]: previousVal !== true
+      } 
+    });
+
+  }
 
   return (
       <div className="grid-y">
         {/* <div className="">
           <Parameter title="Originalité" options={originalityOptions} name='originality' />
         </div> */}
-      
         <div className="grid-x grid-margin-x align-center">
-            <button className="button generate" onClick={onClick50} type="button">Générer</button>
-            <Parameter className="cell" title="Première lettre" options={alphabetOptions} name='firstLetter' />
-            <Parameter className="cell" title="Longueur" options={sizeOptions} name='length' />
+            {/* <button className="button generate" onClick={onClick50} type="button">Générer</button> */}
+            {/* <button className="bi-play-circle-fill button generate" onClick={onClick50} type="button" /> */}
+            <Parameter className="grid-x-cell" title="Première lettre" options={alphabetOptions} name='firstLetter' />
+            <Parameter className="grid-x-cell" title="Longueur" options={sizeOptions} name='length' />
+            <button className="grid-x-cell button generate" onClick={onClick50} type="button">
+              Générer
+              {/* <i className="bi bi-gear-fill" role="img" aria-label="generate"></i> */}
+            </button>
         </div>
-      {/* </div> */}
       <div className="">
           {words.length 
             ? words.map((word, i) => {
                 return (
-                  <input key={i} size={word.length + 2} className={`tag-word tag-color-${colors[i]}`} value={word} readOnly />
+                  <span key={i}>
+                    <input 
+                      size={word.length + 2} 
+                      className={`tag-word tag-color-${colors[i]}`} 
+                      value={word}
+                      onDoubleClick={() => onDoubleClick(word)}
+                      readOnly>
+                    </input>
+                    {likedWords && likedWords[word] === true && <span className="badge">
+                      <i className="bi bi-heart-fill" role="img" aria-label="like"></i>
+                    </span>}
+                  </span>
                 );
               }
             ) : null
@@ -109,13 +136,13 @@ const Form = () => {
     //     {/* <div className="cell small-12">
     //       <Parameter title="Originalité" options={originalityOptions} name='originality' />
     //     </div> */}
-    //     {/* <div class="cell small-12 slidecontainer">
+    //     {/* <div className="cell small-12 slidecontainer">
     //       <input 
     //         type="range" 
     //         min="1" 
     //         max="100" 
     //         // value="50" 
-    //         class="slider" 
+    //         className="slider" 
     //         id="myRange" 
     //       />
     //     </div> */}
