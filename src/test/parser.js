@@ -22,13 +22,13 @@ readStream.on('data', function(chunk) {
 
     // data += mot;
 }).on('end', function() {
-    console.log("fini", data);
+    // console.log("fini", data);
     let originality = 4;
     const matriceSimple3D = generateMatriceSimple3D(data, originality);
     
     for (var i=1; i<=20; i++) {
         const word = generateWord(matriceSimple3D, originality);
-        console.log("mot", i, word);
+        // console.log("mot", i, word);
         // console.log(wordLength, "mot", i, word);
     }
 });

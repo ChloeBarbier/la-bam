@@ -8,14 +8,16 @@ const initialState = {
   dictioDe: [],
   dictioEs: [],
   dictioIt: [],
+  lists: {},
   parameters: {
     sonority: 0, 
     originality: 4, 
     language: 0, 
     length: 0,
     firstLetter: 0,
-    // list: 0
-  }
+    list: 'firstname'
+  },
+  likedWords: {}
 };
 
 const Context = React.createContext(initialState);
@@ -32,6 +34,12 @@ const reducer = (state, action) => {
       return {
         ...state,
         word: action.word || state.word,
+      };
+    }
+    case 'setLists': {
+      return {
+        ...state,
+        lists: action.lists || state.lists,
       };
     }
     case 'setDictioFr': {
@@ -68,6 +76,12 @@ const reducer = (state, action) => {
       return {
         ...state,
         parameters: action.parameters || state.parameters,
+      };
+    }
+    case 'setLikedWords': {
+      return {
+        ...state,
+        likedWords: action.likedWords || state.likedWords,
       };
     }
     default:

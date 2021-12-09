@@ -1,6 +1,7 @@
 export const listOptions = [
-  { value: 0, label: 'Prénoms' },
-  { value: 1, label: 'Pokémons' },
+  { id: 'option-list-firstname', value: 'firstname', label: 'Prénoms', path: 'dictionaries/prenom.txt' },
+  // { id: 'option-list-pokemon', value: 'pokemon', label: 'Pokémons', path: 'dictionaries/pokemon.txt' },
+  // { id: 'option-list-animal', value: 'animal', label: 'Animaux', path: 'dictionaries/animal.txt' },
 ]
 
 export const sonorityOptions = [
@@ -9,7 +10,7 @@ export const sonorityOptions = [
   { value: 2, label: 'Dur' },
 ];
 export const sizeOptions = [
-  { value: 0, label: 'Random' },
+  { value: 0, label: 'Aléatoire' },
   { value: 1, label: 'Court' },
   { value: 2, label: 'Moyen' },
   { value: 3, label: 'Long' },
@@ -25,15 +26,16 @@ export const originalityOptions = [
 ];
 
 export const languageOptions = [
-  { value: 0, dictionary: 'dictioFr', function: 'setDictioFr', label: 'Français', path: '../../../dictionaries/prenom.txt' },
+  // { value: 0, dictionary: 'dictioFr', function: 'setDictioFr', label: 'Français', path: '../../../dictionaries/prenom.txt' },
+  { value: 0, dictionary: 'dictioFr', function: 'setDictioFr', label: 'Français', path: 'dictionaries/prenom.txt' },
   { value: 1, dictionary: 'dictioEn', function: 'setDictioEn', label: 'Anglais', path: 'dictionaries/english.txt' },
-  { value: 2, dictionary: 'dictioDe', function: 'setDictioDe', label: 'Allemand', path: 'dictionaries/deutch.txt' },
-  { value: 3, dictionary: 'dictioEs', function: 'setDictioEs', label: 'Espagnol', path: 'dictionaries/espanol.txt' },
-  { value: 4, dictionary: 'dictioIt', function: 'setDictioIt', label: 'Italien', path: 'dictionaries/italiano.txt' }
+  // { value: 2, dictionary: 'dictioDe', function: 'setDictioDe', label: 'Allemand', path: 'dictionaries/deutch.txt' },
+  // { value: 3, dictionary: 'dictioEs', function: 'setDictioEs', label: 'Espagnol', path: 'dictionaries/espanol.txt' },
+  // { value: 4, dictionary: 'dictioIt', function: 'setDictioIt', label: 'Italien', path: 'dictionaries/italiano.txt' }
 ];
 
 export const alphabetOptions = [
-  { value: 0, label: 'Random' },
+  { value: 0, label: 'Aléatoire' },
   { value: 1, label: 'A' },
   { value: 2, label: 'B' },
   { value: 3, label: 'C' },
