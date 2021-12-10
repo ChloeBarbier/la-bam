@@ -52,12 +52,12 @@
   color: #FDFFFC;
 
   .button.generate {
+    background-color: blue;
+    color: white;
     &:hover {
-      background-color: blue;
-      color: white;
+      background-color: white;
+      color: blue;
     }
-    background-color: white;
-    color: blue;
     border-color: blue;
     border-width: 1px;
     // &:hover {
@@ -193,20 +193,25 @@
 .tag-color-8 {background-color: #1f8c8f !important;}
 .tag-color-9 {background-color: #0e6366 !important;}
 
-.likedWords .button.like {
+.likedWords .button.like, .account .button.like {
   position:absolute;
-  right: 15px;
-  top: 15px;
-  background-color: white;
-  color: blue;
-  border-color: blue;
-  border-width: 1px;
+  top: 10px;
+  // border-color: blue;
+  // border-width: 1px;
   padding: 7px;
-
+  background-color: blue;
+  color:white;
   &:hover {
-    background-color: blue;
-    color:white;
+    background-color: white;
+    color: blue;
   }
+}
+
+.account .button.like {
+  right: 10px;
+}
+.likedWords .button.like {
+  right: 45px;
 }
 .likedWordsModal {
   overflow-y: auto;
@@ -247,11 +252,11 @@
     .button {
       width: fit-content;
       &:hover {
-        background-color: blue;
-        color: white;
+        background-color: white;
+        color: blue;
       }
-      background-color: white;
-      color: blue;
+      background-color: blue;
+      color: white;
       // border-color: blue;
       // border-width: 1px;
       padding: .3rem;
@@ -269,19 +274,19 @@
       align-items: center;
       // margin: 1rem;
       margin-left: 45%;
+      margin-bottom: .2rem;
       
       .button.delete {
+        background-color: orange;
+        color: white;
         &:hover {
-          background-color: orange;
-          color: white;
+          background-color: white;
+          color: orange;
         }
-        background-color: white;
-        color: orange;
         // border-color: orange;
         // border-width: 1px;
         padding: .3rem;
         font-size: 1.2rem;
-
         margin-bottom: 0;
         // padding: 10px;
       }
