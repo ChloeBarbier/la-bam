@@ -9,9 +9,8 @@ const SubTitle = ({displayName}) => {
 
   return (
     <div className="help">
-      Bienvenu.e {displayName}!
-      Génère de nouveaux <span>{selectedList ? selectedList.label.toLowerCase() : 'mots'}</span> à l'infini...
-      Have fun!
+      Bienvenu <b>{displayName}</b>!
+      Génèrez de nouveaux <span>{selectedList ? selectedList.label.toLowerCase() : 'mots'}</span> à l'infini
     </div>
   );
 };

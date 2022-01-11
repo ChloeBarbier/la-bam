@@ -51,7 +51,7 @@ const LikedWordsModal = () => {
       {}
     );
     let unordered = {};
-    for (var i=Object.keys(ordered).length-1; i>0; i--) {
+    for (var i=Object.keys(ordered).length-1; i>=0; i--) {
       unordered = {
         ...unordered,
         [Object.keys(ordered)[i]]: ordered[Object.keys(ordered)[i]]
@@ -117,7 +117,7 @@ const LikedWordsModal = () => {
                         type="button">
                           <i className="bi bi-trash-fill" role="img" aria-label="delete"></i>
                       </button>
-                      <span className="item">{key}</span>
+                      <span className="item">{key[0].toUpperCase() + key.substring(1)}</span>
                     </div>
                   );
                 } return null;
