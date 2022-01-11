@@ -115,7 +115,8 @@ const Form = () => {
                       size={word.length + 2} 
                       className={`tag-word tag-color-${colors[i]}`} 
                       value={word}
-                      onDoubleClick={() => onDoubleClick(word)}
+                      onClick={() => onDoubleClick(word)}
+                      // onDoubleClick={() => onDoubleClick(word)}
                       readOnly>
                     </input>
                     {likedWords && likedWords[word] === true && <span className="badge">

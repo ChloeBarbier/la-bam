@@ -15,18 +15,22 @@ const App = () => {
         provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
         fullLabel: "Avec Google"
       },
-      {
-        provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-        fullLabel: "Avec Facebook"
-      },
-      {
-        provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        fullLabel: "Avec une adresse mail"
-      }
+      // {
+      //   provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+      //   fullLabel: "Avec Facebook"
+      // },
+      // {
+      //   provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      //   fullLabel: "Avec une adresse email"
+      // }
     ],
     callbacks: {
       signInSuccess: () => false
     }
+  }
+
+  const onClickGuestSession = () => {
+    setIsSignedIn(true);
   }
 
   useEffect(() => {
@@ -41,14 +45,20 @@ const App = () => {
           <main className="main">
             <AppTitle 
               isSignedIn={isSignedIn} 
-              signOut={() => firebase.auth().signOut()} 
+              signOut={() => firebase.auth().signOut() && setIsSignedIn(false)} 
               displayName={firebase.auth().currentUser?.displayName} 
               />
             <div className="App-content">
               {isSignedIn ? (
                 <Form />
                 ) : (
-                <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
+                <div>
+                  <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
+                  <button className="grid-x-cell button guest" onClick={onClickGuestSession} type="button">
+                    <i className="bi bi-cup-straw" role="img" aria-label="guest"></i>
+                    <span style={{marginLeft: '10px'}}>Session invité</span>
+                  </button>
+                </div>
               )}
             </div>
           </main>

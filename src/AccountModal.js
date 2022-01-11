@@ -21,9 +21,9 @@ const AccountModal = ({signOut}) => {
         <i className="bi bi-door-open-fill" role="img" aria-label="like"></i>
       </button>
 
-      <div className={`modal likedWordsModal ${modalStyleDisplay}`}>
+      <div className={`modal accountModal ${modalStyleDisplay}`}>
         <div className="modal-content">
-          <div className="modal-title">Êtes-vous sur.e de vouloir vous déconnecter ?</div>
+          <div className="modal-title">Se déconnecter ?</div>
           <button 
             className="button closeModal" 
             onClick={onClose} 
@@ -32,16 +32,18 @@ const AccountModal = ({signOut}) => {
           </button>
           <div className="buttons-tool">
             <button 
-              className="button sortAtoZ" 
+              className="button" 
               onClick={signOut} 
               type="button">
-              <i className="bi bi-hand-thumbs-up-fill" role="img" aria-label="sortAtoZ"></i>
+                Oui
+              {/* <i className="bi bi-hand-thumbs-up-fill" role="img" aria-label="sortAtoZ"></i> */}
             </button>
             <button 
-              className="button sortZtoA" 
+              className="button" 
               onClick={onClose} 
               type="button">
-              <i className="bi bi-hand-thumbs-down-fill" role="img" aria-label="sortZtoA"></i>
+                Non
+              {/* <i className="bi bi-hand-thumbs-down-fill" role="img" aria-label="sortZtoA"></i> */}
             </button>
           </div>
         </div>
