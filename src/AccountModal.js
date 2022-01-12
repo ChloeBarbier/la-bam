@@ -1,6 +1,6 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
-import { Context } from './config/state.manager';
+// import { Context } from './config/state.manager';
 
 const AccountModal = ({signOut}) => {
   const [modalStyleDisplay, setModalStyleDisplay] = React.useState('none');

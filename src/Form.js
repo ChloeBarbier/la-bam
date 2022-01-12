@@ -3,16 +3,10 @@ import { Context } from './config/state.manager';
 // import Word from './Word';
 import Parameter from './Parameter';
 import generate from './generation/generate';
-import { 
-  // sonorityOptions,
-  sizeOptions,
-  // originalityOptions,
-  listOptions,
-  // languageOptions,
-  alphabetOptions 
-} from './constants';
+import { setAuthUser, setWordStatus } from './config/state.dispatch';
+import { sizeOptions, listOptions, alphabetOptions } from './constants';
 
-const Form = () => {
+const Form = ({ user }) => {
   const { state, dispatch } = React.useContext(Context);
   const { parameters, lists, likedWords } = state;
   const [myLists, setMyLists] = React.useState();
@@ -23,7 +17,7 @@ const Form = () => {
   // const languageOption = languageOptions[parameters.language];
   // console.log("words", words);
   
-  const onClick50 = () => {
+  const onGenerate = () => {
     let newWords = [];
     // let dictio = dictionary;
     // if (!dictionary || dictionary.length === 0) {
@@ -43,12 +37,6 @@ const Form = () => {
     setWords(newWords);
     setColors(colorsArray);
   };
-
-  // React.useEffect(() => {
-  //   languageOptions.forEach(
-  //     option => readDictionary(option)
-  //   );
-  // }, []);
 
   React.useEffect(() => {
     let newLists = {};
@@ -79,17 +67,20 @@ const Form = () => {
     setDictionary(lists[parameters.list]);
   }, [lists, parameters.list]);
 
-  const onDoubleClick = (word) => {
-    const previousVal = likedWords[word];
-    dispatch({ 
-      type: 'setLikedWords', 
-      likedWords: {
-        ...likedWords,
-        [word]: previousVal !== true
-      } 
-    });
+  React.useEffect(()=> {
+    setAuthUser(dispatch, user)
+  }, [user, dispatch])
 
+  React.useEffect(() => {
+    console.log("likedWords changed", Object.keys(likedWords).length)
+  }, [likedWords])
+
+  const getHasLikedWords = (word) => {
+    console.log(Object.keys(likedWords).length > 0, likedWords[word] !== undefined)
+    return Object.keys(likedWords).length > 0 && likedWords[word] !== undefined;
   }
+
+  console.log()
 
   return (
       <div className="grid-y">
@@ -101,7 +92,7 @@ const Form = () => {
             {/* <button className="bi-play-circle-fill button generate" onClick={onClick50} type="button" /> */}
             <Parameter className="grid-x-cell" title="Première lettre" options={alphabetOptions} name='firstLetter' />
             <Parameter className="grid-x-cell" title="Longueur" options={sizeOptions} name='length' />
-            <button className="grid-x-cell button generate" onClick={onClick50} type="button">
+            <button className="grid-x-cell button generate" onClick={onGenerate} type="button">
               Générer
               {/* <i className="bi bi-gear-fill" role="img" aria-label="generate"></i> */}
             </button>
@@ -115,11 +106,10 @@ const Form = () => {
                       size={word.length + 2} 
                       className={`tag-word tag-color-${colors[i]}`} 
                       value={word}
-                      onClick={() => onDoubleClick(word)}
-                      // onDoubleClick={() => onDoubleClick(word)}
+                      onClick={() => setWordStatus(dispatch, likedWords, word)}
                       readOnly>
                     </input>
-                    {likedWords && likedWords[word] === true && <span className="badge">
+                    {getHasLikedWords(word) && <span className="badge">
                       <i className="bi bi-heart-fill" role="img" aria-label="like"></i>
                     </span>}
                   </span>

@@ -17,7 +17,20 @@ const initialState = {
     firstLetter: 0,
     list: 'firstname'
   },
-  likedWords: {}
+  likedWords: {},
+  authUser: {
+    creationTime: null,
+    displayName: "invité",
+    email: null,
+    emailVerified: false,
+    isAnonymous: true,
+    lastSignInTime: null,
+    phoneNumber: null,
+    photoURL: null,
+    providerId: null,
+    providerUid: null,
+    uid: null
+  }
 };
 
 const Context = React.createContext(initialState);
@@ -83,6 +96,12 @@ const reducer = (state, action) => {
         ...state,
         likedWords: action.likedWords || state.likedWords,
       };
+    }
+    case 'setAuthUser': {
+      return {
+        ...state,
+        authUser: action.authUser || state.authUser
+      }
     }
     default:
       return state;

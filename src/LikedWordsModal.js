@@ -1,11 +1,12 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 import { Context } from './config/state.manager';
+import { setWordIsUnliked } from './config/state.dispatch';
+import { writeUserData } from './service/api';
 
 const LikedWordsModal = () => {
-  // const { title, options, name } = props;
   const { state, dispatch } = React.useContext(Context);
-  const { likedWords } = state;
+  const { likedWords, authUser } = state;
   const [modalStyleDisplay, setModalStyleDisplay] = React.useState('none');
   const [likedWordsSorted, setLikedWordsSorted] = React.useState(likedWords);
 
@@ -19,17 +20,8 @@ const LikedWordsModal = () => {
     setModalStyleDisplay("none");
   }
 
-  const onDelete = (word) => {
-    dispatch({ 
-      type: 'setLikedWords', 
-      likedWords: {
-        ...likedWords,
-        [word]: false
-      } 
-    });
-  }
-
-  const disabled = Object.keys(likedWords).find(key => likedWords[key] === true) === undefined;
+  const disabled = !(Object.keys(likedWords).length > 0);
+  // 999const disabled = Object.keys(likedWords).find(key => likedWords[key] === true) === undefined;
 
   const onSortAtoZ = () => {
     const ordered = Object.keys(likedWords).sort().reduce(
@@ -62,6 +54,7 @@ const LikedWordsModal = () => {
   };
 
   const sortByAddTime = () => {
+    // TODO
     setLikedWordsSorted(likedWords);
   }
 
@@ -77,6 +70,9 @@ const LikedWordsModal = () => {
 
       <div className={`modal likedWordsModal ${modalStyleDisplay}`}>
         <div className="modal-content">
+          <button className="test" onClick={() => writeUserData(authUser, likedWords)} type="button">
+            save database
+          </button>
           <div className="modal-title">Liste des préférés</div>
           <button 
             className="button closeModal" 
@@ -106,21 +102,19 @@ const LikedWordsModal = () => {
           </div>
           
           <div className="list">
-            {Object.keys(likedWordsSorted).length 
+            {Object.keys(likedWordsSorted).length > 0
               ? Object.keys(likedWordsSorted).map((key, i) => {
-                if (likedWordsSorted[key] === true) {
                   return (
                     <div key={i} className="raw">
                       <button 
                         className="button delete" 
-                        onClick={() => onDelete(key)} 
+                        onClick={() => setWordIsUnliked(dispatch, likedWords, key)} 
                         type="button">
                           <i className="bi bi-trash-fill" role="img" aria-label="delete"></i>
                       </button>
                       <span className="item">{key[0].toUpperCase() + key.substring(1)}</span>
                     </div>
                   );
-                } return null;
                 }) : null}
           </div>
         </div>
