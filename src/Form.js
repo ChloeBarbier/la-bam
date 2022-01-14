@@ -3,12 +3,13 @@ import { Context } from './config/state.manager';
 // import Word from './Word';
 import Parameter from './Parameter';
 import generate from './generation/generate';
-import { setAuthUser, setWordStatus } from './config/state.dispatch';
+import { setUserAuth, setWordStatus } from './config/state.dispatch';
 import { sizeOptions, listOptions, alphabetOptions } from './constants';
+import { initializeDatabaseAndState, updateLikedWordsDB } from './service/api';
 
-const Form = ({ user }) => {
+const Form = ({ auth }) => {
   const { state, dispatch } = React.useContext(Context);
-  const { parameters, lists, likedWords } = state;
+  const { parameters, lists, likedWords, userAuth } = state;
   const [myLists, setMyLists] = React.useState();
   const [words, setWords] = React.useState([]);
   const [colors, setColors] = React.useState([]);
@@ -33,9 +34,19 @@ const Form = ({ user }) => {
       newWords.push(generate(parameters, dictio));
     }
     let colorsArray = [];
-    newWords.forEach((word, i) => colorsArray.push(Math.floor(Math.random() * 10)));
+    newWords.forEach(() => colorsArray.push(Math.floor(Math.random() * 10)));
     setWords(newWords);
     setColors(colorsArray);
+  };
+
+  const getHasLikedWords = (word) => {
+    return Object.keys(likedWords).length > 0 && likedWords[word] !== undefined;
+  };
+
+  const onClickWord = (word) => {
+    setWordStatus(dispatch, likedWords, word);
+    // if user isn't connected as guest
+    if (userAuth.uid) updateLikedWordsDB(userAuth.uid,likedWords, word);
   };
 
   React.useEffect(() => {
@@ -53,7 +64,9 @@ const Form = ({ user }) => {
         });
       }
     );
-    
+    // Reinit likedWords in case of logout then login on another account (useless, done onSignout)
+    // setLikedWords(dispatch, initialState.likedWords);
+    // setUserAuth(dispatch, initialState.userAuth);
   }, []);
 
   React.useEffect(() => {
@@ -68,19 +81,14 @@ const Form = ({ user }) => {
   }, [lists, parameters.list]);
 
   React.useEffect(()=> {
-    setAuthUser(dispatch, user)
-  }, [user, dispatch])
+    // init after connexion
+    setUserAuth(dispatch, auth);
+  }, [auth, dispatch]);
 
-  React.useEffect(() => {
-    console.log("likedWords changed", Object.keys(likedWords).length)
-  }, [likedWords])
-
-  const getHasLikedWords = (word) => {
-    console.log(Object.keys(likedWords).length > 0, likedWords[word] !== undefined)
-    return Object.keys(likedWords).length > 0 && likedWords[word] !== undefined;
-  }
-
-  console.log()
+  React.useEffect(()=> {
+    // init from db, if user isn't connected as guest
+    if (userAuth.uid) initializeDatabaseAndState(dispatch, userAuth);
+  }, [userAuth, dispatch])
 
   return (
       <div className="grid-y">
@@ -106,7 +114,7 @@ const Form = ({ user }) => {
                       size={word.length + 2} 
                       className={`tag-word tag-color-${colors[i]}`} 
                       value={word}
-                      onClick={() => setWordStatus(dispatch, likedWords, word)}
+                      onClick={() => onClickWord(word)}
                       readOnly>
                     </input>
                     {getHasLikedWords(word) && <span className="badge">

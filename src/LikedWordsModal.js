@@ -2,11 +2,11 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import { Context } from './config/state.manager';
 import { setWordIsUnliked } from './config/state.dispatch';
-import { writeUserData } from './service/api';
+import { updateLikedWordsDB} from './service/api';
 
 const LikedWordsModal = () => {
   const { state, dispatch } = React.useContext(Context);
-  const { likedWords, authUser } = state;
+  const { likedWords, userAuth } = state;
   const [modalStyleDisplay, setModalStyleDisplay] = React.useState('none');
   const [likedWordsSorted, setLikedWordsSorted] = React.useState(likedWords);
 
@@ -20,8 +20,7 @@ const LikedWordsModal = () => {
     setModalStyleDisplay("none");
   }
 
-  const disabled = !(Object.keys(likedWords).length > 0);
-  // 999const disabled = Object.keys(likedWords).find(key => likedWords[key] === true) === undefined;
+  const disabled = false; //!(Object.keys(likedWords).length > 0);
 
   const onSortAtoZ = () => {
     const ordered = Object.keys(likedWords).sort().reduce(
@@ -49,13 +48,18 @@ const LikedWordsModal = () => {
         [Object.keys(ordered)[i]]: ordered[Object.keys(ordered)[i]]
       };
     }
-      
     setLikedWordsSorted(unordered);
   };
 
-  const sortByAddTime = () => {
-    // TODO
+  const sortByTime = () => {
+    // By default chronological order (ordered by timestamp)
     setLikedWordsSorted(likedWords);
+  }
+
+  const onClickDelete = (word) => {
+    setWordIsUnliked(dispatch, likedWords, word);
+    // if user isn't connected as guest
+    if (userAuth.uid) updateLikedWordsDB(userAuth.uid, likedWords, word);
   }
 
   React.useEffect(() => {
@@ -70,9 +74,6 @@ const LikedWordsModal = () => {
 
       <div className={`modal likedWordsModal ${modalStyleDisplay}`}>
         <div className="modal-content">
-          <button className="test" onClick={() => writeUserData(authUser, likedWords)} type="button">
-            save database
-          </button>
           <div className="modal-title">Liste des préférés</div>
           <button 
             className="button closeModal" 
@@ -95,9 +96,9 @@ const LikedWordsModal = () => {
             </button>
             <button 
               className="button sortZtoA" 
-              onClick={sortByAddTime} 
+              onClick={sortByTime} 
               type="button">
-              <i className="bi bi-stopwatch" role="img" aria-label="sortByAddTime"></i>
+              <i className="bi bi-stopwatch" role="img" aria-label="sortByTime"></i>
             </button>
           </div>
           
@@ -108,14 +109,14 @@ const LikedWordsModal = () => {
                     <div key={i} className="raw">
                       <button 
                         className="button delete" 
-                        onClick={() => setWordIsUnliked(dispatch, likedWords, key)} 
+                        onClick={() => onClickDelete(key)} 
                         type="button">
                           <i className="bi bi-trash-fill" role="img" aria-label="delete"></i>
                       </button>
                       <span className="item">{key[0].toUpperCase() + key.substring(1)}</span>
                     </div>
                   );
-                }) : null}
+                }) : <div className="help">Pour ajouter des mots à la liste, cliquer dessus.</div>}
           </div>
         </div>
       </div>

@@ -1,28 +1,17 @@
 import isEmpty from 'lodash/isEmpty';
 import isString from 'lodash/isString';
+import isObject from 'lodash/isObject';
 
 /**
  * set authentified user information
  * @param {function} dispatch 
  * @param {object} user 
  */
-export const setAuthUser = (dispatch, user) => {
-    if (!isEmpty(user) && dispatch instanceof Function) {
+export const setUserAuth = (dispatch, userAuth) => {
+    if (!isEmpty(userAuth) && dispatch instanceof Function) {
         dispatch({ 
-            type: 'setAuthUser', 
-            authUser: {
-                creationTime: user.metadata.creationTime,
-                displayName: user.displayName,
-                email: user.email,
-                emailVerified: user.emailVerified,
-                isAnonymous: user.isAnonymous,
-                lastSignInTime: user.metadata.lastSignInTime,
-                phoneNumber: user.phoneNumber,
-                photoURL: user.photoURL,
-                providerId: user.providerData[0].providerId,
-                providerUid: user.providerData[0].uid,
-                uid: user.uid
-            }
+            type: 'setUserAuth', 
+            userAuth
         });
     }
 };
@@ -34,10 +23,11 @@ export const setAuthUser = (dispatch, user) => {
  */
 export const setWordIsUnliked = (dispatch, likedWords, word) => {
     if (isString(word) && dispatch instanceof Function) {
-        delete likedWords[word];
+        const newLikedWords = { ...likedWords };
+        delete newLikedWords[word];
         dispatch({ 
             type: 'setLikedWords', 
-            likedWords
+            likedWords: newLikedWords
         });
     }
 };
@@ -59,5 +49,15 @@ export const setWordStatus = (dispatch, likedWords, word) => {
             });
         }
         else setWordIsUnliked(dispatch, likedWords, word);
+    }
+};
+
+export const setLikedWords = (dispatch, likedWords) => {
+    console.log('setLikedWords 1', isObject(likedWords), dispatch instanceof Function)
+    if (isObject(likedWords) && dispatch instanceof Function) {
+        dispatch({ 
+            type: 'setLikedWords', 
+            likedWords
+        });
     }
 };

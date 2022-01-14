@@ -4,8 +4,8 @@ import { listOptions } from './constants';
 
 const SubTitle = () => {
   const { state } = React.useContext(Context);
-  const { parameters, authUser } = state;
-  const { displayName } = authUser;
+  const { parameters, userAuth } = state;
+  const { displayName } = userAuth;
   const selectedList = listOptions.find(Option => Option.value === parameters.list);
 
   return (

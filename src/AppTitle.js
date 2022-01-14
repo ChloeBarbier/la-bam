@@ -23,7 +23,7 @@ const AppTitle = ({ isSignedIn, signOut }) => {
     <div className="App-title">
       <span className="title">La boîte à mots</span>
       <div className="help">
-        <div>Veuillez-vous connecter pour entrer</div>
+        <div>Se connecter pour entrer</div>
         {/* <div>(Les fonctionnalités de la session "invité" seront limitées)</div> */}
       </div>
     </div>

@@ -18,7 +18,7 @@ const initialState = {
     list: 'firstname'
   },
   likedWords: {},
-  authUser: {
+  userAuth: {
     creationTime: null,
     displayName: "invité",
     email: null,
@@ -97,10 +97,10 @@ const reducer = (state, action) => {
         likedWords: action.likedWords || state.likedWords,
       };
     }
-    case 'setAuthUser': {
+    case 'setUserAuth': {
       return {
         ...state,
-        authUser: action.authUser || state.authUser
+        userAuth: action.userAuth || state.userAuth
       }
     }
     default:
@@ -123,4 +123,4 @@ Provider.propTypes = {
   children: PropTypes.object.isRequired,
 };
 
-export { Context, Provider };
+export { Context, Provider, initialState };
