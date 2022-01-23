@@ -7,11 +7,12 @@ const SubTitle = () => {
   const { parameters, userAuth } = state;
   const { displayName } = userAuth;
   const selectedList = listOptions.find(Option => Option.value === parameters.list);
+  const listLabel = selectedList ? selectedList.label.toLowerCase() : 'mots';
 
   return (
     <div className="help">
-      Bienvenue <b>{displayName}</b>!
-      Générez de nouveaux <span>{selectedList ? selectedList.label.toLowerCase() : 'mots'}</span> à l'infini
+      <div>Bienvenue <b>{displayName}</b>!</div>
+      <div>Générez de nouveaux <span>{listLabel}</span> à l'infini</div>
     </div>
   );
 };
