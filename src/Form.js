@@ -3,18 +3,13 @@ import { Context } from './config/state.manager';
 // import Word from './Word';
 import Parameter from './Parameter';
 import generate from './generation/generate';
-import { 
-  // sonorityOptions,
-  sizeOptions,
-  // originalityOptions,
-  listOptions,
-  // languageOptions,
-  alphabetOptions 
-} from './constants';
+import { setUserAuth, setWordStatus } from './config/state.dispatch';
+import { sizeOptions, listOptions, alphabetOptions } from './constants';
+import { initializeDatabaseAndState, updateLikedWordsDB } from './service/api';
 
-const Form = () => {
+const Form = ({ auth }) => {
   const { state, dispatch } = React.useContext(Context);
-  const { parameters, lists, likedWords } = state;
+  const { parameters, lists, likedWords, userAuth } = state;
   const [myLists, setMyLists] = React.useState();
   const [words, setWords] = React.useState([]);
   const [colors, setColors] = React.useState([]);
@@ -23,7 +18,7 @@ const Form = () => {
   // const languageOption = languageOptions[parameters.language];
   // console.log("words", words);
   
-  const onClick50 = () => {
+  const onGenerate = () => {
     let newWords = [];
     // let dictio = dictionary;
     // if (!dictionary || dictionary.length === 0) {
@@ -39,16 +34,20 @@ const Form = () => {
       newWords.push(generate(parameters, dictio));
     }
     let colorsArray = [];
-    newWords.forEach((word, i) => colorsArray.push(Math.floor(Math.random() * 10)));
+    newWords.forEach(() => colorsArray.push(Math.floor(Math.random() * 10)));
     setWords(newWords);
     setColors(colorsArray);
   };
 
-  // React.useEffect(() => {
-  //   languageOptions.forEach(
-  //     option => readDictionary(option)
-  //   );
-  // }, []);
+  const getHasLikedWords = (word) => {
+    return Object.keys(likedWords).length > 0 && likedWords[word] !== undefined;
+  };
+
+  const onClickWord = (word) => {
+    setWordStatus(dispatch, likedWords, word);
+    // if user isn't connected as guest
+    if (userAuth.uid) updateLikedWordsDB(userAuth.uid,likedWords, word);
+  };
 
   React.useEffect(() => {
     let newLists = {};
@@ -65,7 +64,9 @@ const Form = () => {
         });
       }
     );
-    
+    // Reinit likedWords in case of logout then login on another account (useless, done onSignout)
+    // setLikedWords(dispatch, initialState.likedWords);
+    // setUserAuth(dispatch, initialState.userAuth);
   }, []);
 
   React.useEffect(() => {
@@ -79,17 +80,15 @@ const Form = () => {
     setDictionary(lists[parameters.list]);
   }, [lists, parameters.list]);
 
-  const onDoubleClick = (word) => {
-    const previousVal = likedWords[word];
-    dispatch({ 
-      type: 'setLikedWords', 
-      likedWords: {
-        ...likedWords,
-        [word]: previousVal !== true
-      } 
-    });
+  React.useEffect(()=> {
+    // init after connexion
+    setUserAuth(dispatch, auth);
+  }, [auth, dispatch]);
 
-  }
+  React.useEffect(()=> {
+    // init from db, if user isn't connected as guest
+    if (userAuth.uid) initializeDatabaseAndState(dispatch, userAuth);
+  }, [userAuth, dispatch])
 
   return (
       <div className="grid-y">
@@ -101,7 +100,7 @@ const Form = () => {
             {/* <button className="bi-play-circle-fill button generate" onClick={onClick50} type="button" /> */}
             <Parameter className="grid-x-cell" title="Première lettre" options={alphabetOptions} name='firstLetter' />
             <Parameter className="grid-x-cell" title="Longueur" options={sizeOptions} name='length' />
-            <button className="grid-x-cell button generate" onClick={onClick50} type="button">
+            <button className="grid-x-cell button generate" onClick={onGenerate} type="button">
               Générer
               {/* <i className="bi bi-gear-fill" role="img" aria-label="generate"></i> */}
             </button>
@@ -115,11 +114,10 @@ const Form = () => {
                       size={word.length + 2} 
                       className={`tag-word tag-color-${colors[i]}`} 
                       value={word}
-                      onClick={() => onDoubleClick(word)}
-                      // onDoubleClick={() => onDoubleClick(word)}
+                      onClick={() => onClickWord(word)}
                       readOnly>
                     </input>
-                    {likedWords && likedWords[word] === true && <span className="badge">
+                    {getHasLikedWords(word) && <span className="badge">
                       <i className="bi bi-heart-fill" role="img" aria-label="like"></i>
                     </span>}
                   </span>

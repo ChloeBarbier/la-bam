@@ -6,11 +6,7 @@ import SubTitle from './SubTitle';
 import LikedWordsModal from './LikedWordsModal';
 import AccountModal from './AccountModal';
 
-const AppTitle = ({isSignedIn, signOut, displayName}) => {
-  // const { title, options, name } = props;
-  // const { state, dispatch } = React.useContext(Context);
-  // const { parameters } = state;
-
+const AppTitle = ({ isSignedIn, signOut }) => {
   if (isSignedIn) {
     return (
       <div className="App-title">
@@ -19,7 +15,7 @@ const AppTitle = ({isSignedIn, signOut, displayName}) => {
         <span className="title">La boite à 
           <ListSelector name='liste' />
         </span>
-        <SubTitle displayName={displayName} />
+        <SubTitle />
       </div>
     );
   }
@@ -27,7 +23,7 @@ const AppTitle = ({isSignedIn, signOut, displayName}) => {
     <div className="App-title">
       <span className="title">La boîte à mots</span>
       <div className="help">
-        <div>Veuillez-vous connecter pour entrer</div>
+        <div>Se connecter pour entrer</div>
         {/* <div>(Les fonctionnalités de la session "invité" seront limitées)</div> */}
       </div>
     </div>

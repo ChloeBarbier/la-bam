@@ -1,11 +1,12 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
 import { Context } from './config/state.manager';
+import { setWordIsUnliked } from './config/state.dispatch';
+import { updateLikedWordsDB} from './service/api';
 
 const LikedWordsModal = () => {
-  // const { title, options, name } = props;
   const { state, dispatch } = React.useContext(Context);
-  const { likedWords } = state;
+  const { likedWords, userAuth } = state;
   const [modalStyleDisplay, setModalStyleDisplay] = React.useState('none');
   const [likedWordsSorted, setLikedWordsSorted] = React.useState(likedWords);
 
@@ -19,17 +20,7 @@ const LikedWordsModal = () => {
     setModalStyleDisplay("none");
   }
 
-  const onDelete = (word) => {
-    dispatch({ 
-      type: 'setLikedWords', 
-      likedWords: {
-        ...likedWords,
-        [word]: false
-      } 
-    });
-  }
-
-  const disabled = Object.keys(likedWords).find(key => likedWords[key] === true) === undefined;
+  const disabled = false; //!(Object.keys(likedWords).length > 0);
 
   const onSortAtoZ = () => {
     const ordered = Object.keys(likedWords).sort().reduce(
@@ -57,12 +48,18 @@ const LikedWordsModal = () => {
         [Object.keys(ordered)[i]]: ordered[Object.keys(ordered)[i]]
       };
     }
-      
     setLikedWordsSorted(unordered);
   };
 
-  const sortByAddTime = () => {
+  const sortByTime = () => {
+    // By default chronological order (ordered by timestamp)
     setLikedWordsSorted(likedWords);
+  }
+
+  const onClickDelete = (word) => {
+    setWordIsUnliked(dispatch, likedWords, word);
+    // if user isn't connected as guest
+    if (userAuth.uid) updateLikedWordsDB(userAuth.uid, likedWords, word);
   }
 
   React.useEffect(() => {
@@ -99,29 +96,27 @@ const LikedWordsModal = () => {
             </button>
             <button 
               className="button sortZtoA" 
-              onClick={sortByAddTime} 
+              onClick={sortByTime} 
               type="button">
-              <i className="bi bi-stopwatch" role="img" aria-label="sortByAddTime"></i>
+              <i className="bi bi-stopwatch" role="img" aria-label="sortByTime"></i>
             </button>
           </div>
           
           <div className="list">
-            {Object.keys(likedWordsSorted).length 
+            {Object.keys(likedWordsSorted).length > 0
               ? Object.keys(likedWordsSorted).map((key, i) => {
-                if (likedWordsSorted[key] === true) {
                   return (
                     <div key={i} className="raw">
                       <button 
                         className="button delete" 
-                        onClick={() => onDelete(key)} 
+                        onClick={() => onClickDelete(key)} 
                         type="button">
                           <i className="bi bi-trash-fill" role="img" aria-label="delete"></i>
                       </button>
                       <span className="item">{key[0].toUpperCase() + key.substring(1)}</span>
                     </div>
                   );
-                } return null;
-                }) : null}
+                }) : <div className="help">Pour ajouter des mots à la liste, cliquer dessus.</div>}
           </div>
         </div>
       </div>

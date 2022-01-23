@@ -1,19 +1,29 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 import { Context } from './config/state.manager';
+import { setLikedWords, setUserAuth } from './config/state.dispatch';
+// import PropTypes from 'prop-types';
+import { initialState } from './config/state.manager';
 
 const AccountModal = ({signOut}) => {
+  const { dispatch } = React.useContext(Context);
+
   const [modalStyleDisplay, setModalStyleDisplay] = React.useState('none');
 
   // When the user clicks on the button, open the modal
   const onClickLike = () => {
     setModalStyleDisplay("block");
-  }
+  };
 
   // When the user clicks on <span> (x), close the modal
   const onClose = () => {
     setModalStyleDisplay("none");
-  }
+  };
+
+  const onClickSignOut = () => {
+    setLikedWords(dispatch, initialState.likedWords);
+    setUserAuth(dispatch, initialState.userAuth);
+    signOut();
+  };
 
   return (
     <div className="account">
@@ -33,7 +43,7 @@ const AccountModal = ({signOut}) => {
           <div className="buttons-tool">
             <button 
               className="button" 
-              onClick={signOut} 
+              onClick={onClickSignOut} 
               type="button">
                 Oui
               {/* <i className="bi bi-hand-thumbs-up-fill" role="img" aria-label="sortAtoZ"></i> */}

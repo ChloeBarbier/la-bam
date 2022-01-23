@@ -19,7 +19,10 @@ $border-radius: 2px;
 
   .button.guest {
     background-color: $google-blue;
-    width: 75%; //82%;
+    width: fit-content;
+    i {
+      padding-right: 12px;
+    }
   }
 }
 
@@ -33,6 +36,7 @@ $border-radius: 2px;
   height: 5em;
   justify-content: center;
   margin-top: 1em;
+  margin-bottom: 1em;
 
   .title {
     padding-top: .5em;
@@ -299,6 +303,12 @@ $border-radius: 2px;
     margin: 2rem;
     margin-top: 0rem;
 
+    .help {
+      font-size: .8rem;
+      color: grey;
+      margin: auto;
+      width: fit-content;
+    }
     .raw {
       vertical-align: middle;
       align-items: center;

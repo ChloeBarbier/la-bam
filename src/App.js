@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import './App.scss';
-import { Provider } from './config/state.manager';
+import { Provider, initialState } from './config/state.manager';
 import Form from './Form';
 import AppTitle from './AppTitle';
 import firebase from './service/firebase';
+import isEmpty from 'lodash/isEmpty';
 
 const App = () => {
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [auth, setAuth] = useState(initialState.userAuth);
+
   const uiConfig = {
     // signInFlow: "popup",
     signInOptions: [
@@ -25,17 +28,38 @@ const App = () => {
       // }
     ],
     callbacks: {
-      signInSuccess: () => false
+      signInSuccessWithAuthResult: () => false
     }
   }
 
   const onClickGuestSession = () => {
     setIsSignedIn(true);
-  }
+  };
+
+  const signOut = () => {
+    firebase.auth().signOut();
+    setIsSignedIn(false);
+    setAuth(initialState.userAuth);
+  };
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      setIsSignedIn(!!user);
+    firebase.auth().onAuthStateChanged((auth) => {
+      setIsSignedIn(!!auth);
+      if (isEmpty(auth)) return;
+      const authFormated = {
+        creationTime: auth.metadata.creationTime,
+        displayName: auth.displayName,
+        email: auth.email,
+        emailVerified: auth.emailVerified,
+        isAnonymous: auth.isAnonymous,
+        lastSignInTime: auth.metadata.lastSignInTime,
+        phoneNumber: auth.phoneNumber,
+        photoURL: auth.photoURL,
+        providerId: auth.providerData[0].providerId,
+        providerUid: auth.providerData[0].uid,
+        uid: auth.uid
+      };
+      setAuth(authFormated);
     })
   }, []);
     
@@ -45,18 +69,18 @@ const App = () => {
           <main className="main">
             <AppTitle 
               isSignedIn={isSignedIn} 
-              signOut={() => firebase.auth().signOut() && setIsSignedIn(false)} 
-              displayName={firebase.auth().currentUser?.displayName} 
+              signOut={signOut} 
               />
             <div className="App-content">
               {isSignedIn ? (
-                <Form />
+                <Form auth={auth} />
                 ) : (
                 <div>
                   <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
                   <button className="grid-x-cell button guest" onClick={onClickGuestSession} type="button">
-                    <i className="bi bi-cup-straw" role="img" aria-label="guest"></i>
-                    <span style={{marginLeft: '10px'}}>Session invité</span>
+                    <i className="bi bi-person-circle" role="img" aria-label="guest"></i>
+                    {/* <i className="bi bi-cup-straw" role="img" aria-label="guest"></i> */}
+                    <span>Session Invité</span>
                   </button>
                 </div>
               )}

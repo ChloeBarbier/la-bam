@@ -17,7 +17,20 @@ const initialState = {
     firstLetter: 0,
     list: 'firstname'
   },
-  likedWords: {}
+  likedWords: {},
+  userAuth: {
+    creationTime: null,
+    displayName: "invité",
+    email: null,
+    emailVerified: false,
+    isAnonymous: true,
+    lastSignInTime: null,
+    phoneNumber: null,
+    photoURL: null,
+    providerId: null,
+    providerUid: null,
+    uid: null
+  }
 };
 
 const Context = React.createContext(initialState);
@@ -84,6 +97,12 @@ const reducer = (state, action) => {
         likedWords: action.likedWords || state.likedWords,
       };
     }
+    case 'setUserAuth': {
+      return {
+        ...state,
+        userAuth: action.userAuth || state.userAuth
+      }
+    }
     default:
       return state;
   }
@@ -104,4 +123,4 @@ Provider.propTypes = {
   children: PropTypes.object.isRequired,
 };
 
-export { Context, Provider };
+export { Context, Provider, initialState };
